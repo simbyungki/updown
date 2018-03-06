@@ -89,7 +89,7 @@ function onEnterKey(){
 function startGame(level){
     setNum = setNumber(level);
     $('.game_a').fadeIn();
-    $('.game_a input').focus();
+    $userInput.focus();
 }
 //게임 종료
 function endGame(useCnt){
@@ -132,7 +132,7 @@ function goOrStop(msg, userInputNumber){
     }else{
         choiceNums.push(userInputNumber);
     }
-    $userInput.val('');
+    $userInput.val('').focus();
     alert(msg);
 }
 //점수 반환
