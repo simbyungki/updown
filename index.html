@@ -18,27 +18,42 @@
 <body>
 
 <style>
-.start_btn_a {padding:40px; text-align:center;}
-.start_btn_a .btn_start {display:inline-block; width:300px; height:120px; line-height:50px; color:#fff; font-size:22px; font-weight:bold; text-align:center; background:#bf4be0; border:0; cursor:pointer;}
+.start_a {padding:40px; text-align:center;}
+.start_a h1 {font-size:30px; font-weight:bold;}
+.start_a ul {margin:10px 0 20px;}
+.start_a ul,
+.start_a ul li {line-height:22px; color:#666; font-size:16px; list-style:none;}
+.start_a .btn_start {display:inline-block; width:300px; height:120px; line-height:50px; color:#fff; font-size:22px; font-weight:bold; text-align:center; background:#bf4be0; border:0; cursor:pointer;}
 
 .game_a {display:none; position:fixed; top:20px; left:50%; margin-left:-40%; padding:10%; width:60%; background:#fff; border:2px solid #333;}
 .game_a .summary {margin-bottom:14px; font-size:20px;}
 .game_a input {display:block; padding:0 10px; width:calc(100% - 24px); height:56px; line-height:56px; font-size:22px; text-align:center; border:2px solid #999;}
 .game_a .btn_confirm {display:block; margin-top:5px; width:100%; height:54px; line-height:54px; color:#fff; font-size:18px; background:#bf4be0; border:0; cursor:pointer;}
+
+.status_a {position:fixed; bottom:0; left:0; width:100%; padding:14px 0; min-height:26px; line-height:26px; color:#fff; font-size:20px; text-align:center; background:#444;}
 </style>
 <!-- start button area -->
-<div class="start_btn_a">
+<div class="start_a">
+    <h1>Up&amp;Down Game</h1>
+    <ul>
+        <li>1~100까지 무작위로 생성된 숫자를 맞추는 게임입니다.</li>
+        <li>숫자를 입력 후 엔터키, 또는 OK버튼을 클릭해주세요.</li>
+        <li>Up메세지는 입력한 숫자보다 정답이 높다는 의미이고, Down메세지는 그 반대입니다.</li>
+        <li>적은 횟수로 숫자를 맞히면 더 높은 점수를 획득합니다.</li>
+        <li>아래 START버튼을 눌러 시작하세요.</li>
+    </ul>
     <button type="button" class="btn_start">START</button>
 </div>
 
 <!-- game area -->
 <div class="game_a">
-    <p class="summary">* 숫자를 빠르게 입력 후 엔터키 또는 OK버튼을 클릭해주세요!</p>
+    <p class="summary">* 숫자를 입력 후 엔터키 또는 OK버튼을 클릭해주세요!</p>
     <input type="number" id="user_pad" name="user_pad" placeholder="input number!" onKeyDown="onEnterKey()">
     <button type="button" id="btn_confirm" class="btn_confirm">OK</button>
 </div>
 
-<!--  -->
+<!-- timer -->
+<div class="status_a"></div>
 
 
 <!-- fontawesome -->
@@ -49,10 +64,11 @@
 <script>
 var userInputNumber;
 var setNum;
+var choiceNums = [];
 var $userInput = $('#user_pad');
 var $btnStart = $('.btn_start');
-var $btnConfirm = document.getElementById('btn_confirm');
-
+var $btnConfirm = $('.btn_confirm');
+var $statusArea = $('.status_a');
 $(document).ready(function(){
     //start버튼 클릭 시 게임 스타트
     $btnStart.on('click', function(){
@@ -63,32 +79,23 @@ $(document).ready(function(){
         gameProcess(setNum);
     });
 });
-
-//게임 시작 화면 노출, 선택한 레벨에 따른 번호 생성
-function startGame(level){
-    setNum = setNumber(level);
-    $('.game_a').fadeIn();
-}
-//게임 종료
-function endGame(){
-    $('.game_a').fadeOut();
-}
-
 //숫자 입력 후 엔터키
 function onEnterKey(){
     if(event.keyCode == 13){
         gameProcess(setNum);
     }
 }
-
-//confirm process
-function gameProcess(setNumber){
-    userInputNumber = $userInput.val();
-    if(userInputNumber <= 0 || userInputNumber === undefined || userInputNumber === null || userInputNumber === NaN){
-        alert('1 이상의 숫자를 입력해주세요.');
-        return false;
-    }
-    alert(compareNumber(setNumber, userInputNumber));
+//게임 시작 화면 노출, 선택한 레벨에 따른 번호 생성
+function startGame(level){
+    setNum = setNumber(level);
+    $('.game_a').fadeIn();
+    $('.game_a input').focus();
+}
+//게임 종료
+function endGame(useCnt){
+    choiceNums = [];
+    $('.game_a').fadeOut();
+    $statusArea.text(pointCalculate(useCnt)[1] + '번의 기회를 사용하여 ' +pointCalculate(useCnt)[0]+ '점을 획득하였습니다.');
 }
 //set random number
 function setNumber(maxNum){
@@ -96,15 +103,41 @@ function setNumber(maxNum){
     console.log(randomNumber);
     return randomNumber;
 }
+//confirm process
+function gameProcess(setNumber){
+    var msg;
+    userInputNumber = $userInput.val();
+    if(userInputNumber <= 0 || userInputNumber === undefined || userInputNumber === null || userInputNumber === NaN){
+        alert('1 이상의 숫자를 입력해주세요.');
+        return false;
+    }
+    goOrStop(compareNumber(setNumber, userInputNumber), userInputNumber);
+}
 //compare number
 function compareNumber(setNumber, userNumber){
+    var msg;
     if(setNumber == userNumber){
-        return 'complete';
+        msg = 'complete';
     }else if(setNumber < userNumber){
-        return 'down';
+        msg = 'down';
     }else{
-        return 'up';
+        msg = 'up';
     }
+    return msg;
+}
+//메시지를 확인하여 게임 지속/중단 결정
+function goOrStop(msg, userInputNumber){
+    if(msg == 'complete'){
+        endGame(choiceNums.length+1);
+    }else{
+        choiceNums.push(userInputNumber);
+    }
+    $userInput.val('');
+    alert(msg);
+}
+//점수 반환
+function pointCalculate(useCnt){
+    return [(100-(useCnt*2)), useCnt];
 }
 </script>
 </body>
