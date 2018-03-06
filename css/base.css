@@ -1,0 +1,81 @@
+@charset "utf-8";
+/***** reset *****/
+/* font load */
+@font-face {
+    font-family:'dongkangR';
+    src: url('../font/JSDongkang-Regular.eot');
+    src: url('../font/JSDongkang-Regular.eot?#iefix') format('embedded-opentype'),
+         url('../font/JSDongkang-Regular.woff') format('woff'),
+         url('../font/JSDongkang-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family:'dongkangB';
+    src: url('../font/JSDongkang-Bold.eot');
+    src: url('../font/JSDongkang-Bold.eot?#iefix') format('embedded-opentype'),
+         url('../font/JSDongkang-Bold.woff') format('woff'),
+         url('../font/JSDongkang-Bold.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+html, body, div, applet, object, iframe,p, blockquote, pre, abbr, acronym, address, big, cite, code,del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, sub, sup, tt, var,b, u, i, center,dl, dt, dd, ol, ul, li,fieldset, form, legend,table, caption, tbody, tfoot, thead, tr, th, td,article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary,time, mark, audio, video {font-size:12px; font-family:dongkangR, '돋움', dotum, Helvetica, sans-serif;}
+h1, h2, h3, h4, h5, h6, label{font-family:dongkangR, '돋움', dotum, Helvetica, sans-serif;}
+
+/***** base *****/
+.clear_fix {zoom:1;}
+.clear_fix:after,
+.clear_fix:before {display:block; content:'';}
+.clear_fix:after {clear:both}
+.bold {font-family:dongkangB, dongkangR, 'Nanum Gothic', '돋움', dotum, Helvetica, sans-serif;}
+.screen_out {display:block; overflow:hidden; position:absolute; left:-9999px; width:1px; height:1px; font-size:0; line-height:0; text-indent:-9999px;}
+.no_bg {background:none !important;}
+
+/* placeholder color
+::-webkit-input-placeholder {font-size:14px;vertical-align:middle;color:#999 !important}
+:-webkit-input-placeholder {font-size:14px;vertical-align:middle;color:#999 !important}
+::-moz-placeholder {font-size:14px;vertical-align:middle;color:#999 !important}
+:-moz-placeholder {font-size:14px;vertical-align:middle;color:#999 !important}
+:-ms-input-placeholder {font-size:14px;vertical-align:middle;color:#999 !important}
+.placeholder{font-size:14px;vertical-align:middle;color:#999 !important}
+*/
+
+/***** skipnavigation *****/
+#skipNav {position:absolute; top:0; left:0; z-index:1001; width:100%; height:0;}
+#skipNav p, #skipNav ul, #skipNav ul li{height:0;}
+#skipNav li a {display:block; overflow:hidden; position:absolute; top:0; left:0; width:1px; height:1px; margin-bottom:-1px; margin-left:-1px; font-weight:700; color:#000; text-align:center; white-space:nowrap;}
+#skipNav li a:focus {z-index:1000; width:100%; height:auto; padding:10px 0; background:#000; color:#fff;}
+
+/***** browser *****/
+/* IE9
+:root #ie9 {display:block\9;}
+*/
+/* IE8
+@media \0screen {
+    #ie8 {display:block;}
+}
+*/
+/* IE 7
+html > body #ie7 {*display: block;}
+*/
+/* IE 6
+body #ie6 {_display: block;}
+*/
+/* chrome and safari
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    #safari {display:block;}
+}
+*/
+/* Firefox
+@-moz-document url-prefix() {
+    #firefox {display:block;}
+}
+*/
+/* Opera
+html:first-child #opera {
+    head~body #opera {display: block;}
+}
+*/
