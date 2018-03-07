@@ -38,8 +38,9 @@
 .game_a .btn_close span {display:block; position:absolute; top:50%; transform:translateY(-50%); width:100%; height:3px; background:#444;}
 .game_a .btn_close span:first-child {transform:rotate(-45deg);}
 .game_a .btn_close span:last-child {transform:rotate(45deg);}
+.game_a .timer {margin-top:20px; letter-spacing:-2px; color:#444; font-size:30px; text-align:center;}
 
-.status_a {display:none; position:fixed; bottom:0; left:0; width:100%; padding:14px 0; min-height:26px; line-height:26px; color:#fff; font-size:20px; text-align:center; background:#444;}
+.status_a {display:none; position:fixed; top:0; left:0; width:100%; padding:14px 0; min-height:26px; line-height:26px; color:#fff; font-size:20px; text-align:center; background:#444;}
 
 .btn_common {display:block; margin:0 auto; width:80%; max-width:300px; height:60px; line-height:60px; color:#fff; font-size:22px; font-weight:bold; text-align:center; background:#bf4be0; cursor:pointer; border:0;}
 </style>
@@ -67,10 +68,15 @@
         </p>
         <input type="tel" id="user_pad" name="user_pad" placeholder="input number!" onKeyDown="onEnterKey()">
         <button type="button" id="btn_confirm" class="btn_confirm btn_common">OK</button>
+        <p class="timer">
+            <span class="m">00</span> : 
+            <span class="s">00</span> : 
+            <span class="ms">00</span>
+        </p>
     </div>
 </div>
 
-<!-- timer -->
+<!-- status -->
 <div class="status_a"></div>
 
 
@@ -81,6 +87,9 @@
 var userInputNumber;
 var setNum;
 var userName;
+var startTime;
+var endTime;
+var _runTime;
 var examDB = localStorage;
 var choiceNums = [];
 var $userName = $('#user_nickname');
@@ -103,6 +112,7 @@ $(document).ready(function(){
     //게임 닫기 버튼(X) 클릭 시
     $btnClose.on('click', function(){
         endGame();
+        resetGame();
     });
 });
 //숫자 입력 후 엔터키
@@ -111,10 +121,11 @@ function onEnterKey(){
         gameProcess(setNum);
     }
 }
-//게임 시작 화면 노출, 선택한 레벨에 따른 번호 생성w
+//게임 시작 화면 노출, 선택한 레벨에 따른 번호 생성
 function startGame(level){
     setNum = setNumber(level);
     userName = $userName.val();
+    startTime = new Date().getTime();
     if(userName == ''){
         showMsgBox('! 사용자 별칭을 입력해주세요.', 5000);
         $userName.focus();
@@ -122,6 +133,7 @@ function startGame(level){
         examDB.setItem('name', userName);
         $('.game_a').animate({'top':0}, 1000, 'easeOutBounce');
         $userNum.focus();
+        _runTime = setInterval(runTime, 100);
     }
 }
 //게임 종료
@@ -138,7 +150,9 @@ function endGame(useCnt){
 //게임 종료 시 게임 reset
 function resetGame(){
     $feedBack.html('<i class="far fa-keyboard"></i>');
-    $(gameGuide).text('* 숫자를 입력 후 엔터키 또는 OK버튼을 클릭해주세요!');
+    $gameGuide.text('* 숫자를 입력 후 엔터키 또는 OK버튼을 클릭해주세요!');
+    $userNum.removeAttr('disabled').prop({'placeholder':'input number!'});
+
 }
 //안내(메시지 전달) 박스 노출
 function showMsgBox(msg, delayTime){
@@ -148,6 +162,7 @@ function showMsgBox(msg, delayTime){
 //up , down에 따른 피드백
 function upOrDown(state){
     var awesomeIco, feedMsg;
+    var defaultIco = '<i class="far fa-keyboard"></i>';
     if(state == 'up'){
         awesomeIco = '<i class="far fa-thumbs-up"></i>';
         feedMsg = '! 보다 더 높은 숫자를 입력하세요.'
@@ -157,10 +172,13 @@ function upOrDown(state){
     }else{
         awesomeIco = '<i class="fab fa-font-awesome-flag"></i>';
         feedMsg = '! 굉장합니다!'
-        $userNum.prop({'disabled':'disabled', 'placeholder':'Awesome!'});
+        $userNum.prop({'disabled':'disabled', 'placeholder':'Awesome!'});   
+        clearInterval(_runTime);     
     }
     $feedBack.html(awesomeIco);
+    //$feedBack.delay(1500).html(defaultIco);
     $gameGuide.text(state + feedMsg);
+    //$gameGuide.delay(1500).text('* 숫자를 입력 후 엔터키 또는 OK버튼을 클릭해주세요!');
 }
 //set random number
 function setNumber(maxNum){
@@ -203,6 +221,19 @@ function goOrStop(msg, userInputNumber){
 //점수 반환
 function pointCalculate(useCnt){
     return [(100-(useCnt*2)), useCnt];
+}
+//소요시간 계산
+function runTime(){
+    endTime = new Date().getTime();
+    var strTime = String(startTime - endTime);
+    m = Math.floor((((strTime)/(1000*60))%60)*-1);
+    s = Math.floor((((strTime)/(1000))%60)*-1);
+    ms = String(Math.floor((strTime)*-1)).substring((strTime.length-4),(strTime.length-2));
+    $('.m').text(m);
+    $('.s').text(s);
+    $('.ms').text(ms);
+    var playTime = Number(m + s + ms);
+    examDB.setItem('playTime',playTime)
 }
 </script>
 </body>
