@@ -12,29 +12,40 @@
     <!-- Title -->
     <title>Play Up&amp;Down</title>
     <!-- Css -->
+    <link href="https://use.fontawesome.com/releases/v5.0.8/css/all.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="css/base.css">
     <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
 
 <style>
-.start_a {padding:40px; text-align:center;}
-.start_a h1 {font-size:30px; font-weight:bold;}
-.start_a ul {margin:10px 0 20px;}
+.start_a {position:fixed; top:0%; left:0%; padding:60px 10px 0; width:100%; height:100%; text-align:center; border:3px solid #333; box-sizing:border-box;}
+.start_a h1 {letter-spacing:-2px; font-size:40px; font-weight:bold;}
+.start_a h1 i {font-size:30px;}
+.start_a ul {margin:30px 0 0;}
 .start_a ul,
-.start_a ul li {line-height:22px; color:#666; font-size:16px; list-style:none;}
-.start_a .btn_start {display:inline-block; width:300px; height:120px; line-height:50px; color:#fff; font-size:22px; font-weight:bold; text-align:center; background:#bf4be0; border:0; cursor:pointer;}
+.start_a ul li {line-height:24px; color:#666; font-size:16px; list-style:none;}
+.start_a .btn_start {margin:30px auto 0;}
 
-.game_a {display:none; position:fixed; top:20px; left:50%; margin-left:-40%; padding:10%; width:60%; background:#fff; border:2px solid #333;}
-.game_a .summary {margin-bottom:14px; font-size:20px;}
-.game_a input {display:block; padding:0 10px; width:calc(100% - 24px); height:56px; line-height:56px; font-size:22px; text-align:center; border:2px solid #999;}
-.game_a .btn_confirm {display:block; margin-top:5px; width:100%; height:54px; line-height:54px; color:#fff; font-size:18px; background:#bf4be0; border:0; cursor:pointer;}
+.game_a {position:fixed; top:-100%; left:0; padding:60px 10px 0; width:100%; height:100%; background:#fff; border:3px solid #333; box-sizing:border-box;}
+.game_a > div {margin:0 auto; width:50%; min-width:260px;}
+.game_a .summary {position:relative; margin-top:30px; font-size:20px; text-align:center;}
+.game_a .feed {margin:0 auto; padding:20px; width:80px; height:80px; line-height:80px; text-align:center; background:#fff; opacity:0.9; border-radius:50em; border:2px solid red;}
+.game_a .feed i {color:red; font-size:60px; vertical-align:middle;}
+.game_a input {display:block; margin:30px auto 20px; padding:0 10px; width:80%; max-width:300px; height:56px; line-height:56px; font-size:22px; text-align:center; border:2px solid #999; box-sizing:border-box;}
+.game_a .btn_confirm {margin:5px auto 0;}
+.game_a .btn_close {position:absolute; top:15px; right:15px; width:34px; height:34px;}
+.game_a .btn_close span {display:block; position:absolute; top:50%; transform:translateY(-50%); width:100%; height:3px; background:#444;}
+.game_a .btn_close span:first-child {transform:rotate(-45deg);}
+.game_a .btn_close span:last-child {transform:rotate(45deg);}
 
 .status_a {display:none; position:fixed; bottom:0; left:0; width:100%; padding:14px 0; min-height:26px; line-height:26px; color:#fff; font-size:20px; text-align:center; background:#444;}
+
+.btn_common {display:block; width:80%; max-width:300px; height:60px; line-height:60px; color:#fff; font-size:22px; font-weight:bold; text-align:center; background:#bf4be0; cursor:pointer; border:0;}
 </style>
 <!-- start button area -->
 <div class="start_a">
-    <h1>Up&amp;Down Game</h1>
+    <h1><i class="far fa-thumbs-up"></i></i> Up&amp;Down <i class="far fa-thumbs-down"></i> Game</h1>
     <ul>
         <li>1~100까지 무작위로 생성된 숫자를 맞추는 게임입니다.</li>
         <li>숫자를 입력 후 엔터키, 또는 OK버튼을 클릭해주세요.</li>
@@ -42,22 +53,26 @@
         <li>적은 횟수로 숫자를 맞히면 더 높은 점수를 획득합니다.</li>
         <li>아래 START버튼을 눌러 시작하세요.</li>
     </ul>
-    <button type="button" class="btn_start">START</button>
+    <button type="button" class="btn_start btn_common">START</button>
 </div>
 
 <!-- game area -->
 <div class="game_a">
-    <p class="summary">* 숫자를 입력 후 엔터키 또는 OK버튼을 클릭해주세요!</p>
-    <input type="number" id="user_pad" name="user_pad" placeholder="input number!" onKeyDown="onEnterKey()">
-    <button type="button" id="btn_confirm" class="btn_confirm">OK</button>
+    <button type="button" title="닫기" class="btn_close"><span></span><span></span></button>
+    <div>
+        <div class="feed"><i class="far fa-keyboard"></i></div>
+        <p class="summary">
+            * 숫자를 입력 후 엔터키 또는 OK버튼을 클릭해주세요!
+        </p>
+        <input type="tel" id="user_pad" name="user_pad" placeholder="input number!" onKeyDown="onEnterKey()">
+        <button type="button" id="btn_confirm" class="btn_confirm btn_common">OK</button>
+    </div>
 </div>
 
 <!-- timer -->
 <div class="status_a"></div>
 
 
-<!-- fontawesome -->
-<script src="https://use.fontawesome.com/4df80cbab3.js"></script>
 <script type="text/javascript" src="js/lib/jquery.1.11.1.min.js"></script>
 <script type="text/javascript" src="js/lib/jquery-ui-1.10.3.custom.min.js"></script>
 <script type="text/javascript" src="js/updown.js"></script>
@@ -67,7 +82,10 @@ var setNum;
 var choiceNums = [];
 var $userInput = $('#user_pad');
 var $btnStart = $('.btn_start');
+var $btnClose = $('.btn_close');
 var $btnConfirm = $('.btn_confirm');
+var $feedBack = $('.feed');
+var $guide = $('.summary');
 var $statusArea = $('.status_a');
 $(document).ready(function(){
     //start버튼 클릭 시 게임 스타트
@@ -77,6 +95,10 @@ $(document).ready(function(){
     //숫자 입력 후 OK버튼 클릭 시
     $btnConfirm.on('click', function(){
         gameProcess(setNum);
+    });
+    //게임 닫기 버튼(X) 클릭 시
+    $btnClose.on('click', function(){
+        endGame();
     });
 });
 //숫자 입력 후 엔터키
@@ -88,14 +110,39 @@ function onEnterKey(){
 //게임 시작 화면 노출, 선택한 레벨에 따른 번호 생성
 function startGame(level){
     setNum = setNumber(level);
-    $('.game_a').fadeIn();
+    $('.game_a').animate({'top':0}, 1200, 'easeOutBounce');
     $userInput.focus();
 }
 //게임 종료
 function endGame(useCnt){
     choiceNums = [];
-    $('.game_a').fadeOut();
-    $statusArea.fadeIn().text(pointCalculate(useCnt)[1] + '번의 기회를 사용하여 ' +pointCalculate(useCnt)[0]+ '점을 획득하였습니다.');
+    if(useCnt == undefined){
+        showMsgBox('게임을 종료하였습니다.', 5000);
+    }else{
+        showMsgBox(pointCalculate(useCnt)[1] + '번의 기회를 사용하여 ' +pointCalculate(useCnt)[0]+ '점을 획득하였습니다.', 15000);
+    }
+    //$('.game_a').animate({'top':'-100%'}, 1200, 'easeOutBounce');
+}
+//안내(메시지 전달) 박스 노출
+function showMsgBox(msg, delayTime){
+    $statusArea.fadeIn().html(msg);
+    $statusArea.delay(delayTime).fadeOut();
+}
+//up , down에 따른 피드백
+function upOrDown(state){
+    var awesomeIco, feedMsg;
+    if(state == 'up'){
+        awesomeIco = '<i class="far fa-thumbs-up"></i>';
+        feedMsg = '! 보다 더 높은 숫자를 입력하세요.'
+    }else if(state == 'down'){
+        awesomeIco = '<i class="far fa-thumbs-down"></i>';
+        feedMsg = '! 보다 더 낮은 숫자를 입력하세요.'
+    }else{
+        awesomeIco = '<i class="fab fa-font-awesome-flag"></i>';
+        feedMsg = '! 정확합니다. 축하합니다!'
+    }
+    $feedBack.html(awesomeIco);
+    $guide.text(state + feedMsg);
 }
 //set random number
 function setNumber(maxNum){
@@ -108,16 +155,16 @@ function gameProcess(setNumber){
     var msg;
     userInputNumber = $userInput.val();
     if(userInputNumber <= 0 || userInputNumber === undefined || userInputNumber === null || userInputNumber === NaN){
-        alert('1 이상의 숫자를 입력해주세요.');
+        $guide.text('1 이상의 숫자를 입력해주세요.');
         return false;
     }
     goOrStop(compareNumber(setNumber, userInputNumber), userInputNumber);
 }
-//compare number
+//두 숫자를 비교하여 결과(message) return
 function compareNumber(setNumber, userNumber){
     var msg;
     if(setNumber == userNumber){
-        msg = 'complete';
+        msg = 'awesome';
     }else if(setNumber < userNumber){
         msg = 'down';
     }else{
@@ -125,15 +172,15 @@ function compareNumber(setNumber, userNumber){
     }
     return msg;
 }
-//메시지를 확인하여 게임 지속/중단 결정
+//메시지를 확인하여 게임 지속/중단 결정 및 feedback
 function goOrStop(msg, userInputNumber){
-    if(msg == 'complete'){
+    if(msg == 'awesome'){
         endGame(choiceNums.length+1);
     }else{
         choiceNums.push(userInputNumber);
     }
     $userInput.val('').focus();
-    alert(msg);
+    upOrDown(msg);
 }
 //점수 반환
 function pointCalculate(useCnt){
