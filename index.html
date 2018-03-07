@@ -25,7 +25,7 @@
 .start_a ul {margin:30px 0 0;}
 .start_a ul,
 .start_a ul li {line-height:24px; color:#666; font-size:16px; list-style:none;}
-.start_a .btn_start {margin:30px auto 0;}
+.start_a input {display:block; margin:30px auto 20px; padding:0 10px; width:80%; max-width:300px; height:56px; line-height:56px; font-size:22px; text-align:center; border:2px solid #999; box-sizing:border-box;}
 
 .game_a {position:fixed; top:-100%; left:0; padding:60px 10px 0; width:100%; height:100%; background:#fff; border:3px solid #333; box-sizing:border-box;}
 .game_a > div {margin:0 auto; width:50%; min-width:260px;}
@@ -33,7 +33,7 @@
 .game_a .feed {margin:0 auto; padding:20px; width:80px; height:80px; line-height:80px; text-align:center; background:#fff; opacity:0.9; border-radius:50em; border:2px solid red;}
 .game_a .feed i {color:red; font-size:60px; vertical-align:middle;}
 .game_a input {display:block; margin:30px auto 20px; padding:0 10px; width:80%; max-width:300px; height:56px; line-height:56px; font-size:22px; text-align:center; border:2px solid #999; box-sizing:border-box;}
-.game_a .btn_confirm {margin:5px auto 0;}
+.game_a .btn_confirm {}
 .game_a .btn_close {position:absolute; top:15px; right:15px; width:34px; height:34px;}
 .game_a .btn_close span {display:block; position:absolute; top:50%; transform:translateY(-50%); width:100%; height:3px; background:#444;}
 .game_a .btn_close span:first-child {transform:rotate(-45deg);}
@@ -41,7 +41,7 @@
 
 .status_a {display:none; position:fixed; bottom:0; left:0; width:100%; padding:14px 0; min-height:26px; line-height:26px; color:#fff; font-size:20px; text-align:center; background:#444;}
 
-.btn_common {display:block; width:80%; max-width:300px; height:60px; line-height:60px; color:#fff; font-size:22px; font-weight:bold; text-align:center; background:#bf4be0; cursor:pointer; border:0;}
+.btn_common {display:block; margin:0 auto; width:80%; max-width:300px; height:60px; line-height:60px; color:#fff; font-size:22px; font-weight:bold; text-align:center; background:#bf4be0; cursor:pointer; border:0;}
 </style>
 <!-- start button area -->
 <div class="start_a">
@@ -51,8 +51,9 @@
         <li>숫자를 입력 후 엔터키, 또는 OK버튼을 클릭해주세요.</li>
         <li>Up메세지는 입력한 숫자보다 정답이 높다는 의미이고, Down메세지는 그 반대입니다.</li>
         <li>적은 횟수로 숫자를 맞히면 더 높은 점수를 획득합니다.</li>
-        <li>아래 START버튼을 눌러 시작하세요.</li>
+        <li>별칭 입력 후 START버튼을 눌러 시작하세요.</li>
     </ul>
+    <input type="text" id="user_nickname" name="user_nickname" placeholder="별칭을 입력해주세요!">
     <button type="button" class="btn_start btn_common">START</button>
 </div>
 
@@ -79,13 +80,16 @@
 <script>
 var userInputNumber;
 var setNum;
+var userName;
+var examDB = localStorage;
 var choiceNums = [];
-var $userInput = $('#user_pad');
+var $userName = $('#user_nickname');
+var $userNum = $('#user_pad');
 var $btnStart = $('.btn_start');
 var $btnClose = $('.btn_close');
 var $btnConfirm = $('.btn_confirm');
 var $feedBack = $('.feed');
-var $guide = $('.summary');
+var $gameGuide = $('.summary');
 var $statusArea = $('.status_a');
 $(document).ready(function(){
     //start버튼 클릭 시 게임 스타트
@@ -107,21 +111,34 @@ function onEnterKey(){
         gameProcess(setNum);
     }
 }
-//게임 시작 화면 노출, 선택한 레벨에 따른 번호 생성
+//게임 시작 화면 노출, 선택한 레벨에 따른 번호 생성w
 function startGame(level){
     setNum = setNumber(level);
-    $('.game_a').animate({'top':0}, 1200, 'easeOutBounce');
-    $userInput.focus();
+    userName = $userName.val();
+    if(userName == ''){
+        showMsgBox('! 사용자 별칭을 입력해주세요.', 5000);
+        $userName.focus();
+    }else{
+        examDB.setItem('name', userName);
+        $('.game_a').animate({'top':0}, 1000, 'easeOutBounce');
+        $userNum.focus();
+    }
 }
 //게임 종료
 function endGame(useCnt){
     choiceNums = [];
     if(useCnt == undefined){
         showMsgBox('게임을 종료합니다.', 5000);
-        $('.game_a').animate({'top':'-100%'}, 1200, 'easeOutBounce');
+        $('.game_a').animate({'top':'-100%'}, 1000, 'easeOutBounce');
     }else{
-        showMsgBox(pointCalculate(useCnt)[1] + '번의 기회를 사용하여 ' +pointCalculate(useCnt)[0]+ '점을 획득하였습니다.', 15000);
+        showMsgBox(pointCalculate(examDB.name + '님은 ' + useCnt)[1] + '번의 기회를 사용하여 ' +pointCalculate(useCnt)[0]+ '점을 획득하였습니다.', 15000);
+        examDB.point = pointCalculate(useCnt)[0];
     }
+}
+//게임 종료 시 게임 reset
+function resetGame(){
+    $feedBack.html('<i class="far fa-keyboard"></i>');
+    $(gameGuide).text('* 숫자를 입력 후 엔터키 또는 OK버튼을 클릭해주세요!');
 }
 //안내(메시지 전달) 박스 노출
 function showMsgBox(msg, delayTime){
@@ -139,10 +156,11 @@ function upOrDown(state){
         feedMsg = '! 보다 더 낮은 숫자를 입력하세요.'
     }else{
         awesomeIco = '<i class="fab fa-font-awesome-flag"></i>';
-        feedMsg = '! 정확합니다. 축하합니다!'
+        feedMsg = '! 굉장합니다!'
+        $userNum.prop({'disabled':'disabled', 'placeholder':'Awesome!'});
     }
     $feedBack.html(awesomeIco);
-    $guide.text(state + feedMsg);
+    $gameGuide.text(state + feedMsg);
 }
 //set random number
 function setNumber(maxNum){
@@ -153,9 +171,9 @@ function setNumber(maxNum){
 //confirm process
 function gameProcess(setNumber){
     var msg;
-    userInputNumber = $userInput.val();
-    if(userInputNumber <= 0 || userInputNumber === undefined || userInputNumber === null || userInputNumber === NaN){
-        $guide.text('1 이상의 숫자를 입력해주세요.');
+    userInputNumber = $userNum.val();
+    if(userInputNumber <= 0 || userInputNumber === undefined || null || NaN){
+        $gameGuide.text('1 이상의 숫자를 입력해주세요.');
         return false;
     }
     goOrStop(compareNumber(setNumber, userInputNumber), userInputNumber);
@@ -179,7 +197,7 @@ function goOrStop(msg, userInputNumber){
     }else{
         choiceNums.push(userInputNumber);
     }
-    $userInput.val('').focus();
+    $userNum.val('').focus();
     upOrDown(msg);
 }
 //점수 반환
