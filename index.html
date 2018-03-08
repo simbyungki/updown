@@ -22,7 +22,8 @@
 .start_a ul {margin:30px 0 0;}
 .start_a ul,
 .start_a ul li {line-height:24px; color:#666; font-size:16px; list-style:none;}
-.start_a input {display:block; margin:30px auto 20px; padding:0 10px; width:80%; max-width:300px; height:56px; line-height:56px; font-size:22px; text-align:center; border:2px solid #999; box-sizing:border-box;}
+.start_a select {margin:20px auto 0; padding:0 15px; width:80%; max-width:300px; height:50px; color:#444; font-size:18px; text-align:center;}
+.start_a input {display:block; margin:20px auto 20px; padding:0 10px; width:80%; max-width:300px; height:56px; line-height:56px; font-size:22px; text-align:center; border:2px solid #999; box-sizing:border-box;}
 .game_a {position:fixed; top:-100%; left:0; padding:60px 10px 0; width:100%; height:100%; background:#fff; border:3px solid #333; box-sizing:border-box;}
 .game_a > div {margin:0 auto; width:50%; min-width:260px;}
 .game_a .summary {position:relative; margin-top:30px; font-size:20px; text-align:center;}
@@ -44,12 +45,18 @@
 <div class="start_a">
     <h1><i class="far fa-thumbs-up"></i></i> Up&amp;Down <i class="far fa-thumbs-down"></i> Game</h1>
     <ul>
-        <li>1~100까지 무작위로 생성된 숫자를 맞추는 게임입니다.</li>
-        <li>숫자를 입력 후 엔터키, 또는 OK버튼을 클릭해주세요.</li>
+        <li>선택한 범위 내 무작위로 생성된 숫자를 맞추는 게임입니다.</li>
+        <li>게임 방법은 숫자를 입력 후 엔터키, 또는 OK버튼을 클릭해주세요.</li>
         <li>Up메세지는 입력한 숫자보다 정답이 높다는 의미이고, Down메세지는 그 반대입니다.</li>
         <li>적은 횟수로 숫자를 맞히면 더 높은 점수를 획득합니다.</li>
-        <li>별칭 입력 후 START버튼을 눌러 시작하세요.</li>
+        <li>숫자 범위 선택 후 별칭 입력 후 START버튼을 눌러 시작하세요.</li>
     </ul>
+    <select id="term" name="term" class="selectbox">
+        <option value="0" selected>숫자 범위를 선택하세요.</option>
+        <option value="101">1 ~ 100</option>
+        <option value="1001">1 ~ 1,000</option>
+        <option value="10001">1 ~ 10,000</option>
+    </select>
     <input type="text" id="user_nickname" name="user_nickname" placeholder="별칭을 입력해주세요!">
     <button type="button" class="btn_start btn_common">START</button>
 </div>
@@ -81,6 +88,7 @@
 <script type="text/javascript" src="js/updown.js"></script>
 <script>
 var userInputNumber;
+var termNum;
 var setNum;
 var userName;
 var startTime;
@@ -88,6 +96,7 @@ var endTime;
 var _runTime;
 var examDB = localStorage;
 var choiceNums = [];
+var $termNum = $('#term');
 var $userName = $('#user_nickname');
 var $userNum = $('#user_pad');
 var $btnStart = $('.btn_start');
@@ -99,7 +108,7 @@ var $statusArea = $('.status_a');
 $(document).ready(function(){
     //start버튼 클릭 시 게임 스타트
     $btnStart.on('click', function(){
-        startGame(101);
+        startGame(); 
     });
     //숫자 입력 후 OK버튼 클릭 시
     $btnConfirm.on('click', function(){
@@ -111,6 +120,7 @@ $(document).ready(function(){
         resetGame();
     });
 });
+//시작 
 //숫자 입력 후 엔터키
 function onEnterKey(){
     if(event.keyCode == 13){
@@ -119,18 +129,25 @@ function onEnterKey(){
 }
 //게임 시작 화면 노출, 선택한 레벨에 따른 번호 생성
 function startGame(level){
-    setNum = setNumber(level);
     userName = $userName.val();
+    termNum = $termNum.val();
     startTime = new Date().getTime();
-    if(userName == ''){
-        showMsgBox('! 사용자 별칭을 입력해주세요.', 5000);
-        $userName.focus();
+    if(termNum != 0){
+        if(userName == ''){
+            showMsgBox('! 사용자 별칭을 입력해주세요.', 5000);
+            $userName.focus();
+        }else{
+            setNum = setNumber(termNum);
+            examDB.setItem('term', termNum);
+            examDB.setItem('name', userName);
+            $('.game_a').animate({'top':0}, 1000, 'easeOutBounce');
+            $userNum.focus();
+            _runTime = setInterval(runTime, 10);
+        }       
     }else{
-        examDB.setItem('name', userName);
-        $('.game_a').animate({'top':0}, 1000, 'easeOutBounce');
-        $userNum.focus();
-        _runTime = setInterval(runTime, 10);
-    }
+        showMsgBox('! 숫자 범위를 선택해주세요.', 5000);
+        $termNum.focus();
+    }      
 }
 //게임 종료
 function endGame(useCnt){
