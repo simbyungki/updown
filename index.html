@@ -65,8 +65,8 @@
         <input type="tel" id="user_pad" name="user_pad" placeholder="input number!" onKeyDown="onEnterKey()">
         <button type="button" id="btn_confirm" class="btn_confirm btn_common">OK</button>
         <p class="timer">
-            <span class="m">00</span> : 
-            <span class="s">00</span> : 
+            <span class="m">00</span> :
+            <span class="s">00</span> :
             <span class="ms">00</span>
         </p>
     </div>
@@ -168,8 +168,8 @@ function upOrDown(state){
     }else{
         awesomeIco = '<i class="fab fa-font-awesome-flag"></i>';
         feedMsg = '! 굉장합니다!'
-        $userNum.prop({'disabled':'disabled', 'placeholder':'Awesome!'});   
-        clearInterval(_runTime);     
+        $userNum.prop({'disabled':'disabled', 'placeholder':'Awesome!'});
+        clearInterval(_runTime);
     }
     $feedBack.html(awesomeIco);
     //$feedBack.delay(1500).html(defaultIco);
@@ -228,7 +228,7 @@ function runTime(){
     $('.m').text(m);
     $('.s').text(s);
     $('.ms').text(ms);
-    var playTime = Number(m + s + ms);
+    var playTime = parseInt(m + s + ms);
     examDB.setItem('playTime',playTime)
 }
 </script>
