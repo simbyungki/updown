@@ -120,7 +120,6 @@ $(document).ready(function(){
         resetGame();
     });
 });
-//시작 
 //숫자 입력 후 엔터키
 function onEnterKey(){
     if(event.keyCode == 13){
@@ -170,7 +169,7 @@ function resetGame(){
 //안내(메시지 전달) 박스 노출
 function showMsgBox(msg, delayTime){
     $statusArea.fadeIn().html(msg);
-    $statusArea.delay(delayTime).fadeOut();
+    $statusArea.delay(delayTime).fadeOut().html('');
 }
 //up , down에 따른 피드백
 function upOrDown(state){
