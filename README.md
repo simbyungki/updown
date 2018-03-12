@@ -18,6 +18,10 @@
 ---
 ## Work History  
 
+- 2018.03.12 v1.2
+  > showMsgBox 함수 수정 중.. (fadeIn()후 delay()메소드 대신 setTimeOut()메소드를 사용하여 fadeOut() 처리)
+  > globalStatus 변수 추가 (전체 게임 흐름을 제어 하기 위함 > true : 게임 진행중 / false : 게임 종료상태)
+
 - 2018.03.10 v1.2
   > 정답 맞출 시 localstorage에 종료된 시간 저장
 

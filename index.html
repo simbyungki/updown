@@ -22,7 +22,7 @@
 .start_a ul {margin:30px 0 0;}
 .start_a ul,
 .start_a ul li {line-height:24px; color:#666; font-size:16px; list-style:none;}
-.start_a select {margin:20px auto 0; padding:0 15px; width:80%; max-width:300px; height:50px; color:#444; font-size:18px; text-align:center;}
+.start_a select {margin:20px auto 0; padding:0 15px; width:80%; max-width:300px; height:50px; color:#444; font-size:22px; text-align:center;}
 .start_a input {display:block; margin:20px auto 20px; padding:0 10px; width:80%; max-width:300px; height:56px; line-height:56px; font-size:22px; text-align:center; border:2px solid #999; box-sizing:border-box;}
 .game_a {position:fixed; top:-100%; left:0; padding:60px 10px 0; width:100%; height:100%; background:#fff; border:3px solid #333; box-sizing:border-box;}
 .game_a > div {margin:0 auto; width:50%; min-width:260px;}
@@ -87,6 +87,7 @@
 <script type="text/javascript" src="js/lib/jquery-ui-1.10.3.custom.min.js"></script>
 <script type="text/javascript" src="js/updown.js"></script>
 <script>
+var globalStat;    
 var userInputNumber;
 var termNum;
 var setNum;
@@ -112,7 +113,9 @@ $(document).ready(function(){
     });
     //숫자 입력 후 OK버튼 클릭 시
     $btnConfirm.on('click', function(){
-        gameProcess(setNum);
+        if(globalStat == true){
+            gameProcess(setNum);
+        }        
     });
     //게임 닫기 버튼(X) 클릭 시
     $btnClose.on('click', function(){
@@ -128,6 +131,7 @@ function onEnterKey(){
 }
 //게임 시작 화면 노출, 선택한 레벨에 따른 번호 생성
 function startGame(level){
+    globalStat = true;
     userName = $userName.val();
     termNum = $termNum.val();
     startTime = new Date().getTime();
@@ -157,6 +161,7 @@ function endGame(useCnt){
     }else{
         showMsgBox(pointCalculate(examDB.name + '님은 ' + useCnt)[1] + '번의 기회를 사용하여 ' +pointCalculate(useCnt)[0]+ '점을 획득하였습니다.', 15000);
         examDB.point = pointCalculate(useCnt)[0];
+        globalStat = false;
     }
 }
 //게임 종료 시 게임 reset
@@ -169,7 +174,9 @@ function resetGame(){
 //안내(메시지 전달) 박스 노출
 function showMsgBox(msg, delayTime){
     $statusArea.fadeIn().html(msg);
-    $statusArea.delay(delayTime).fadeOut().html('');
+    setTimeout(function(){
+        $statusArea.fadeOut().html('');
+    }, delayTime);
 }
 //up , down에 따른 피드백
 function upOrDown(state){
