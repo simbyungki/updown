@@ -24,19 +24,40 @@
 .start_a ul li {line-height:24px; color:#666; font-size:16px; list-style:none;}
 .start_a select {margin:20px auto 0; padding:0 15px; width:80%; max-width:300px; height:50px; color:#444; font-size:22px; text-align:center; border:2px solid #999;}
 .start_a input {display:block; margin:20px auto 20px; padding:0 10px; width:80%; max-width:300px; height:56px; line-height:56px; font-size:22px; text-align:center; border:2px solid #999; box-sizing:border-box;}
+.start_a .btn_view_rank {display:inline-block; margin-top:25px; color:#444; font-size:20px; font-weight:bold; text-decoration:underline;}
 .game_a {display:none; position:fixed; top:0; left:0; padding:60px 10px; width:100%; height:100%; background:#fff; border:3px solid #333; box-sizing:border-box; overflow:auto;}
 .game_a > div {margin:0 auto; width:50%; min-width:260px;}
 .game_a .summary {position:relative; margin-top:30px; font-size:20px; text-align:center;}
 .game_a .feed {margin:0 auto; padding:20px; width:80px; height:80px; line-height:80px; text-align:center; background:#fff; opacity:0.9; border-radius:50em; border:2px solid red;}
 .game_a .feed i {color:red; font-size:60px; vertical-align:middle;}
 .game_a input {display:block; margin:30px auto 20px; padding:0 10px; width:80%; max-width:300px; height:56px; line-height:56px; font-size:22px; text-align:center; border:2px solid #999; box-sizing:border-box;}
-.game_a .btn_close {position:absolute; top:15px; right:15px; width:34px; height:34px;}
-/*.game_a .btn_close:hover {-webkit-animation:spinBtn 1s infinite ease-in-out; animation:spinBtn 0.7s 1 ease-in-out alternate;}*/
-.game_a .btn_close span {display:block; position:absolute; top:50%; transform:translateY(-50%); width:100%; height:3px; background:#444;}
-.game_a .btn_close span:first-child {transform:rotate(-45deg);}
-.game_a .btn_close span:last-child {transform:rotate(45deg);}
 .game_a .timer {margin-top:20px; letter-spacing:-2px; color:#444; font-size:30px; text-align:center;}
-.status_a {display:none; position:fixed; top:0; left:0; width:100%; padding:14px 0; min-height:26px; line-height:26px; color:#fff; font-size:20px; text-align:center; background:#444;}
+.btn_close {position:absolute; top:15px; right:15px; width:34px; height:34px;}
+.rank_a {display:none; position:fixed; top:0; left:0; padding:60px 10px; width:100%; height:100%; background:#fff; border:3px solid #333; box-sizing:border-box; overflow:auto;}
+.rank_a .title {margin-bottom:25px; letter-spacing:-2px; font-size:40px; font-weight:bold; text-align:center;}
+.rank_a .caution {margin:25px 0; color:red; font-size:14px; text-align:center;}
+.rank_a .category li {float:left; width:33.33%;}
+.rank_a .category li a {display:block; width:100%; padding:6px 0; line-height:22px; color:#888; font-size:16px; text-align:center; border-bottom:2px solid #888;}
+.rank_a .category li.on a {color:red; font-weight:bold; border-bottom:2px solid red;}
+.rank_a .rank {padding:15px 0;}
+.rank_a .rank li {height:30px; line-height:30px; zoom:1;}
+.rank_a .rank li:after {display:block; content:""; clear:both;}
+.rank_a .rank li span {display:block; float:left; width:33.33%; text-align:center;}
+.rank_a .rank li span i {color:#000; font-size:22px;}
+.rank_a .rank li:nth-child(1) {height:40px; line-height:40px; color:#000; font-size:22px; font-weight:bold; border:2px solid red;}
+.rank_a .rank li:nth-child(2) {color:#111; font-size:21px;}
+.rank_a .rank li:nth-child(3) {color:#222; font-size:20px;}
+.rank_a .rank li:nth-child(4) {color:#333; font-size:19px;}
+.rank_a .rank li:nth-child(5) {color:#444; font-size:18px;}
+.rank_a .rank li:nth-child(6) {color:#555; font-size:17px;}
+.rank_a .rank li:nth-child(7) {color:#666; font-size:16px;}
+.rank_a .rank li:nth-child(8) {color:#777; font-size:15px;}
+.rank_a .rank li:nth-child(9) {color:#888; font-size:14px;}
+.rank_a .rank li:nth-child(10) {color:#999; font-size:13px;}.status_a {display:none; position:fixed; top:0; left:0; width:100%; padding:14px 5%; min-height:26px; line-height:26px; color:#fff; font-size:20px; text-align:center; box-sizing:border-box; background:#444;}
+/*.game_a .btn_close:hover {-webkit-animation:spinBtn 1s infinite ease-in-out; animation:spinBtn 0.7s 1 ease-in-out alternate;}*/
+.btn_close span {display:block; position:absolute; top:50%; transform:translateY(-50%); width:100%; height:3px; background:#444;}
+.btn_close span:first-child {transform:rotate(-45deg);}
+.btn_close span:last-child {transform:rotate(45deg);}
 .btn_common {display:block; margin:0 auto; width:80%; max-width:300px; height:60px; line-height:60px; color:#fff; font-size:22px; font-weight:bold; text-align:center; background:#bf4be0; cursor:pointer; border:0;}
 
 @keyframes spinBtn {
@@ -67,6 +88,7 @@
     </select>
     <input type="text" id="user_nickname" name="user_nickname" placeholder="별칭을 입력해주세요!">
     <button type="button" class="btn_start btn_common">START</button>
+    <a href="javascript:;" class="btn_view_rank">명예의 전당 보기</a>
 </div>
 
 <!-- game area -->
@@ -87,8 +109,31 @@
     </div>
 </div>
 
-<!-- status -->
+<!-- status view area -->
 <div class="status_a"></div>
+<!-- ranking area -->
+<div class="rank_a">
+    <h2 class="title">명예의 전당</h2>
+    <p class="caution">* 아직 기능개발 전입니다.</p>
+    <button type="button" title="닫기" class="btn_close"><span></span><span></span></button>
+    <ul class="category clear_fix">
+        <li class="on"><a href="javascript:;">어린이<br>1 ~ 100</a></li>
+        <li><a href="javascript:;">청소년<br>1 ~ 1,000</a></li>
+        <li><a href="javascript:;">성인<br>1 ~ 10,000</a></li>
+    </ul>
+    <ul class="rank">
+        <li><span class="name">1. 홍길동 <i class="far fa-thumbs-up"></i></span><span class="point">88</span><span class="time">00:1:30</span></li>
+        <li><span class="name">2. 김또깡</span><span class="point">88</span><span class="time">00:1:32</span></li>
+        <li><span class="name">3. 문주인</span><span class="point">77</span><span class="time">00:1:28</span></li>
+        <li><span class="name">4. 방소리</span><span class="point">65</span><span class="time">00:1:25</span></li>
+        <li><span class="name">5. 발소리</span><span class="point">54</span><span class="time">00:1:23</span></li>
+        <li><span class="name">6. 구두방</span><span class="point">54</span><span class="time">00:1:23</span></li>
+        <li><span class="name">7. 맞짱</span><span class="point">54</span><span class="time">00:1:23</span></li>
+        <li><span class="name">8. 이소리</span><span class="point">54</span><span class="time">00:1:23</span></li>
+        <li><span class="name">9. 김소라</span><span class="point">54</span><span class="time">00:1:23</span></li>
+        <li><span class="name">10. 곽한구</span><span class="point">54</span><span class="time">00:1:23</span></li>
+    </ul>
+</div>
 
 
 <script type="text/javascript" src="js/lib/jquery.1.11.1.min.js"></script>
@@ -111,6 +156,7 @@ var $userNum = $('#user_pad');
 var $btnStart = $('.btn_start');
 var $btnClose = $('.btn_close');
 var $btnConfirm = $('.btn_confirm');
+var $btnViewRank = $('.btn_view_rank');
 var $feedBack = $('.feed');
 var $gameGuide = $('.summary');
 var $statusArea = $('.status_a');
@@ -127,10 +173,27 @@ $(document).ready(function(){
     });
     //게임 닫기 버튼(X) 클릭 시
     $btnClose.on('click', function(){
-        endGame();
-        resetGame();
+        var thisParent = $(this).parent();
+        if(thisParent.hasClass('rank_a')){
+            hideRanking();
+        }else{
+            endGame();
+            resetGame();
+        }
+    });
+    //랭킹 보기 클릭
+    $btnViewRank.on('click', function(){
+        showRanking();
     });
 });
+//랭킹 보기
+function showRanking(){
+    $('.rank_a').fadeIn('fast');
+}
+//랭킹 숨기기
+function hideRanking(){
+    $('.rank_a').fadeOut('fast');
+}
 //숫자 입력 후 엔터키
 function onEnterKey(){
     if(event.keyCode == 13){
