@@ -53,9 +53,10 @@
 .rank_a .rank li:nth-child(7) {color:#666; font-size:16px;}
 .rank_a .rank li:nth-child(8) {color:#777; font-size:15px;}
 .rank_a .rank li:nth-child(9) {color:#888; font-size:14px;}
-.rank_a .rank li:nth-child(10) {color:#999; font-size:13px;}.status_a {display:none; position:fixed; top:0; left:0; width:100%; padding:14px 5%; min-height:26px; line-height:26px; color:#fff; font-size:20px; text-align:center; box-sizing:border-box; background:#444;}
-/*.game_a .btn_close:hover {-webkit-animation:spinBtn 1s infinite ease-in-out; animation:spinBtn 0.7s 1 ease-in-out alternate;}*/
-.btn_close span {display:block; position:absolute; top:50%; transform:translateY(-50%); width:100%; height:3px; background:#444;}
+.rank_a .rank li:nth-child(10) {color:#999; font-size:13px;}
+.status_a {display:none; position:fixed; top:0; left:0; width:100%; padding:14px 5%; min-height:26px; line-height:26px; color:#fff; font-size:20px; text-align:center; box-sizing:border-box; background:#444;}
+.game_a .btn_close:hover {-webkit-animation:spinBtn 1s infinite ease-in-out; animation:spinBtn 0.3s 1 ease-in-out alternate;}
+.btn_close span {display:block; position:absolute; top:16px; transform:rotate(0); width:100%; height:3px; background:#444;}
 .btn_close span:first-child {transform:rotate(-45deg);}
 .btn_close span:last-child {transform:rotate(45deg);}
 .btn_common {display:block; margin:0 auto; width:80%; max-width:300px; height:60px; line-height:60px; color:#fff; font-size:22px; font-weight:bold; text-align:center; background:#bf4be0; cursor:pointer; border:0;}
@@ -64,7 +65,7 @@
     0% {
         transform:rotate(0);
     } 100% {
-        transform:rotate(-270deg);
+        transform:rotate(270deg);
     }
 }
 </style>
@@ -206,8 +207,8 @@ function startGame(level){
     userName = $userName.val();
     termNum = $termNum.val();
     startTime = new Date().getTime();
-    if(termNum != 0){
-        if(userName == ''){
+    if(termNum !== 0){
+        if(userName === ''){
             showMsgBox('! 사용자 별칭을 입력해주세요.', 5000);
             $userName.focus();
         }else{
@@ -228,7 +229,7 @@ function startGame(level){
 //게임 종료
 function endGame(useCnt){
     choiceNums = [];
-    if(useCnt == undefined){
+    if(useCnt === undefined){
         showMsgBox('게임을 종료합니다.', 3000);
         $('.start_a').fadeIn('fast');
         $('.game_a').fadeOut('fast');
@@ -244,7 +245,6 @@ function resetGame(){
     $feedBack.html('<i class="far fa-keyboard"></i>');
     $gameGuide.text('* 숫자를 입력 후 엔터키 또는 OK버튼을 클릭해주세요!');
     $userNum.removeAttr('disabled').prop({'placeholder':'input number!'});
-
 }
 //안내(메시지 전달) 박스 노출
 function showMsgBox(msg, delayTime){
@@ -308,8 +308,8 @@ function compareNumber(setNumber, userNumber){
 }
 //메시지를 확인하여 게임 지속/중단 결정 및 feedback
 function goOrStop(msg, userInputNumber){
-    if(msg == 'awesome'){
-        endGame(choiceNums.length+1);
+    if(msg === 'awesome'){
+        endGame(choiceNums.length +1);
     }else{
         choiceNums.push(userInputNumber);
     }
@@ -327,11 +327,11 @@ function runTime(){
     m = Math.floor((((strTime)/(1000*60))%60)*-1);
     s = Math.floor((((strTime)/(1000))%60)*-1);
     ms = String(Math.floor((strTime)*-1)).substring((strTime.length-4),(strTime.length-2));
-    $('.m').text(m);
-    $('.s').text(s);
+    $('.m').text(m < 10 ? `0${m}` : m);
+    $('.s').text(s < 10 ? `0${s}` : s);
     $('.ms').text(ms);
     var playTime = parseInt(m + s + ms);
-    examDB.setItem('playTime',playTime)
+    examDB.setItem('playTime', playTime)
 }
 </script>
 </body>
